@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/")
 public class UsersController {
 
     private UserService userService;
@@ -28,7 +27,7 @@ public class UsersController {
         this.roleService = roleService;
     }
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @GetMapping("/login")
     public String loginPage() {
         return "users/login";
     }
@@ -75,7 +74,9 @@ public class UsersController {
 
     @GetMapping("/admin/{id}/edit")
     public String edit(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userService.getUserById(id));
+        User user = userService.getUserById(id);
+        user.setPassword(null);
+        model.addAttribute("user", user);
         model.addAttribute("roles", roleService.getAllRoles());
         return "users/edit";
     }
